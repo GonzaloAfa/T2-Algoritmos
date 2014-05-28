@@ -12,7 +12,7 @@ public class KDPoint {
     }
 
     public double getCoord(boolean c) {
-        if (c==KDTree.horizontal)
+        if (c == KDTree.horizontal)
             return x;
         else
             return y;
@@ -32,5 +32,9 @@ public class KDPoint {
 
     public void setY(double y) {
         this.y = y;
+    }
+
+    public double distTo(KDPoint point) {
+        return Math.sqrt(Math.pow(point.getX() - getX(), 2) + Math.pow(point.getY() - getY(), 2));
     }
 }

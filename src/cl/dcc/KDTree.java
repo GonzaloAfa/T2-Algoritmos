@@ -16,6 +16,7 @@ public class KDTree {
 
     public KDTree(SplitMethod splitMethod) {
         this.splitMethod = splitMethod;
+        root = new KDNode();
     }
 
     public KDNode construirKDTree(List<KDPoint> P, boolean splitaxis) {
@@ -37,6 +38,7 @@ public class KDTree {
         root.left = construirKDTree(splittedPoints[0], !splitaxis);
         root.right = construirKDTree(splittedPoints[1], !splitaxis);
 
+        root.setSplitPoint(splitPoint, splitaxis);
         return root;
     }
 
@@ -65,5 +67,9 @@ public class KDTree {
 
     public void setRoot(KDNode root) {
         this.root = root;
+    }
+
+    public boolean isCloseEnough() {
+        return false;
     }
 }
