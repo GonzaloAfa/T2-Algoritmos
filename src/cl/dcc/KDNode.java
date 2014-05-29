@@ -15,16 +15,22 @@ public class KDNode {
     // Leaf data
     private KDPoint point;
 
+    // Bounding rectangle
+    protected KDRect rect;
+
     public KDNode(KDAxis kdAxis) {
         axis = kdAxis;
     }
 
-    public KDNode(List<KDPoint> P, boolean splitaxis) {
+    public KDNode(List<KDPoint> P, boolean splitaxis, KDRect bounds) {
         // Retornamos una hoja con el punto dado
         if (P.size() == 1) {
             point = P.get(0);
             return;
         }
+
+        // Marcamos los límites de este nodo interno
+        rect = bounds;
 
         // Necesitamos dividir el conjunto de puntos dado cierto criterio
         double splitPoint = KDTree.splitMethod.getSplitPoint(P, splitaxis);
@@ -33,8 +39,10 @@ public class KDNode {
 
         ArrayList[] splittedPoints = KDTree.split(P, splitPoint, splitaxis);
 
-        setLeft(new KDNode(splittedPoints[0], !splitaxis));
-        setRight(new KDNode(splittedPoints[1], !splitaxis));
+        KDRect[] boundingRects = rect.split(axis);
+
+        setLeft(new KDNode(splittedPoints[0], !splitaxis, boundingRects[0]));
+        setRight(new KDNode(splittedPoints[1], !splitaxis, boundingRects[1]));
     }
 
     public KDNode(KDPoint kdPoint) {
@@ -76,5 +84,11 @@ public class KDNode {
 
     public KDNode getRight() {
         return right;
+    }
+
+    public String toString() {
+        if (isLeaf())
+            return "Leaf: " + point;
+        return "Node: " + axis + "\n\t" + left + "\n\t" + right;
     }
 }

@@ -29,4 +29,8 @@ public class KDAxis {
     public void setSplitaxis(boolean splitaxis) {
         this.splitaxis = splitaxis;
     }
+
+    public String toString() {
+        return "Axis: " + value + " " + (splitaxis ? "Horizontal" : "Vertical");
+    }
 }

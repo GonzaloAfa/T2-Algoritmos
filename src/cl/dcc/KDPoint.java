@@ -37,4 +37,8 @@ public class KDPoint {
     public double distTo(KDPoint point) {
         return Math.sqrt(Math.pow(point.getX() - getX(), 2) + Math.pow(point.getY() - getY(), 2));
     }
+
+    public String toString() {
+        return "Point: [" + x + ", " + y + "]";
+    }
 }

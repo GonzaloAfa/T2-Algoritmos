@@ -1,5 +1,6 @@
 package cl.dcc;
 
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,8 +23,9 @@ public class KDTree {
         if (P == null || P.size() == 0) {
             return null;
         }
+        KDRect rect = new KDRect(0, 0, Math.sqrt(P.size()), Math.sqrt(P.size()));
 
-        root = new KDNode(P,splitaxis);
+        root = new KDNode(P, splitaxis, rect);
 
         return root;
     }
@@ -55,15 +57,15 @@ public class KDTree {
         return false;
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         List<KDPoint> P = new ArrayList<KDPoint>();
         for (int i = 0; i < 10; i++) {
-            P.add(new KDPoint(Math.random(),Math.random()));
+            P.add(new KDPoint(Math.random()*Math.sqrt(P.size()), Math.random()*Math.sqrt(P.size())));
         }
 
         KDTree tree = new KDTree(new MedianKDTree());
         tree.construirKDTree(P, KDAxis.horizontal);
 
-        int a=3;
+        int a = 3;
     }
 }
