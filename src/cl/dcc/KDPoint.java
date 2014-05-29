@@ -12,7 +12,7 @@ public class KDPoint {
     }
 
     public double getCoord(boolean c) {
-        if (c == KDTree.horizontal)
+        if (c == KDAxis.horizontal)
             return x;
         else
             return y;

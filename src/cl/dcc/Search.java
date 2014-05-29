@@ -8,22 +8,23 @@ public class Search {
     static double distActual;
     static KDPoint mejorActual;
 
-    public KDPoint vecinoMasCercano(KDTree tree, KDPoint q) {
-        return vecinoMasCercano(tree.root, q);
+    public Search(){
+        distActual = 0;
+        mejorActual = null;
     }
 
     public KDPoint vecinoMasCercano(KDNode node, KDPoint q) {
-        KDTree farNode;
+        KDNode farNode = null;
 
         if (node.isLeaf()) {
             checkIfBest(node.getPoint(), q);
             return mejorActual;
-        } else if (node.getAxis() > q.getCoord(node.getSplitaxis())) {
-            vecinoMasCercano(node.left, q);
-            farNode = node.right;
+        } else if (node.greaterThanAxis(q)) {
+            vecinoMasCercano(node.getLeft(), q);
+            farNode = node.getRight();
         } else {
-            vecinoMasCercano(node.right, q);
-            farNode = node.left;
+            vecinoMasCercano(node.getRight(), q);
+            farNode = node.getLeft();
         }
         if (farNode.isCloseEnough())
             vecinoMasCercano(farNode, q);

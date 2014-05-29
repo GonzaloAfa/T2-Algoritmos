@@ -1,65 +1,56 @@
 package cl.dcc;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Ian on 27-05-2014.
  */
 public class KDNode {
 
-    double axis;
-    KDNode left;
-    KDNode right;
-    KDPoint point;
-    boolean splitaxis, root;
+    // Internal node data
+    private KDNode left, right;
+    private KDAxis axis;
 
-    public KDNode(KDPoint point) {
-        this.point = point;
+    // Leaf data
+    private KDPoint point;
+
+    public KDNode(KDAxis kdAxis) {
+        axis = kdAxis;
     }
 
-    public KDNode(KDNode left, KDNode right) {
-        this.left = left;
-        this.right = right;
+    public KDNode(List<KDPoint> P, boolean splitaxis) {
+        // Retornamos una hoja con el punto dado
+        if (P.size() == 1) {
+            point = P.get(0);
+            return;
+        }
+
+        // Necesitamos dividir el conjunto de puntos dado cierto criterio
+        double splitPoint = KDTree.splitMethod.getSplitPoint(P, splitaxis);
+
+        axis = new KDAxis(splitPoint, splitaxis);
+
+        ArrayList[] splittedPoints = KDTree.split(P, splitPoint, splitaxis);
+
+        setLeft(new KDNode(splittedPoints[0], !splitaxis));
+        setRight(new KDNode(splittedPoints[1], !splitaxis));
     }
 
-    public KDNode(KDPoint point, KDNode left, KDNode right, boolean splitaxis) {
-        this.left = left;
-        this.right = right;
-        this.point = point;
-        this.splitaxis = splitaxis;
-    }
-
-    public KDNode(double axis, boolean splitaxis, KDNode left, KDNode right) {
-        this.left = left;
-        this.right = right;
-        this.axis = axis;
-        this.splitaxis = splitaxis;
-    }
-
-    public KDNode() {
-        root = true;
+    public KDNode(KDPoint kdPoint) {
+        point = kdPoint;
     }
 
     public boolean isLeaf() {
         return left == null && right == null;
     }
 
-    public double getAxis() {
-        return axis;
-    }
-
-    public void setAxis(double axis) {
-        this.axis = axis;
-    }
-
-    public KDNode getLeft() {
-        return left;
+    public boolean isCloseEnough() {
+        return false;
     }
 
     public void setLeft(KDNode left) {
         this.left = left;
-    }
-
-    public KDNode getRight() {
-        return right;
     }
 
     public void setRight(KDNode right) {
@@ -70,20 +61,20 @@ public class KDNode {
         return point;
     }
 
-    public void setPoint(KDPoint point) {
-        this.point = point;
+    public boolean greaterThanAxis(KDPoint q) {
+        KDAxis axis = getAxis();
+        return axis.getValue() < q.getCoord(axis.getSplitaxis());
     }
 
-    public boolean getSplitaxis() {
-        return splitaxis;
+    public KDAxis getAxis() {
+        return axis;
     }
 
-    public void setSplitaxis(boolean splitaxis) {
-        this.splitaxis = splitaxis;
+    public KDNode getLeft() {
+        return left;
     }
 
-    public void setSplitPoint(double splitPoint, boolean splitaxis) {
-        setSplitaxis(splitaxis);
-        setAxis(axis);
+    public KDNode getRight() {
+        return right;
     }
 }

@@ -9,7 +9,7 @@ public class Main {
         List<KDPoint> points = new ArrayList<KDPoint>();
 
         KDTree tree = new KDTree(new MeanKDTree());
-        tree.construirKDTree(points, KDTree.horizontal);
+        tree.construirKDTree(points, KDAxis.horizontal);
 	// write your code here
     }
 }

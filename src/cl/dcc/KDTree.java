@@ -8,15 +8,13 @@ import java.util.List;
  */
 public class KDTree {
 
-    public static final boolean vertical = false, horizontal = true;
-
     KDNode root;
+    Search search = new Search();
 
-    SplitMethod splitMethod;
+    public static SplitMethod splitMethod;
 
     public KDTree(SplitMethod splitMethod) {
         this.splitMethod = splitMethod;
-        root = new KDNode();
     }
 
     public KDNode construirKDTree(List<KDPoint> P, boolean splitaxis) {
@@ -25,24 +23,16 @@ public class KDTree {
             return null;
         }
 
-        // Retornamos una hoja con el punto dado
-        if (P.size() == 1) {
-            return new KDNode(P.get(0));
-        }
+        root = new KDNode(P,splitaxis);
 
-        // Necesitamos dividir el conjunto de puntos dado cierto criterio
-        double splitPoint = splitMethod.getSplitPoint(P, splitaxis);
-
-        ArrayList[] splittedPoints = split(P, splitPoint, splitaxis);
-
-        root.left = construirKDTree(splittedPoints[0], !splitaxis);
-        root.right = construirKDTree(splittedPoints[1], !splitaxis);
-
-        root.setSplitPoint(splitPoint, splitaxis);
         return root;
     }
 
-    public ArrayList[] split(List<KDPoint> p, double splitPoint, boolean splitaxis) {
+    public KDPoint vecinoMasCercano(KDPoint q) {
+        return search.vecinoMasCercano(root, q);
+    }
+
+    public static ArrayList[] split(List<KDPoint> p, double splitPoint, boolean splitaxis) {
 
         ArrayList[] lists = {new ArrayList<KDPoint>(), new ArrayList<KDPoint>()};
 
@@ -61,15 +51,19 @@ public class KDTree {
         return root;
     }
 
-    public KDNode getRoot() {
-        return root;
-    }
-
-    public void setRoot(KDNode root) {
-        this.root = root;
-    }
-
     public boolean isCloseEnough() {
         return false;
+    }
+
+    public static void main(String[] args){
+        List<KDPoint> P = new ArrayList<KDPoint>();
+        for (int i = 0; i < 10; i++) {
+            P.add(new KDPoint(Math.random(),Math.random()));
+        }
+
+        KDTree tree = new KDTree(new MedianKDTree());
+        tree.construirKDTree(P, KDAxis.horizontal);
+
+        int a=3;
     }
 }
