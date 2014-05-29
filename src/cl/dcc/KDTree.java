@@ -1,5 +1,6 @@
 package cl.dcc;
 
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,11 +9,10 @@ import java.util.List;
  */
 public class KDTree {
 
-    public static final boolean vertical = false, horizontal = true;
-
     KDNode root;
+    Search search = new Search();
 
-    SplitMethod splitMethod;
+    public static SplitMethod splitMethod;
 
     public KDTree(SplitMethod splitMethod) {
         this.splitMethod = splitMethod;
@@ -23,24 +23,18 @@ public class KDTree {
         if (P == null || P.size() == 0) {
             return null;
         }
+        KDRect rect = new KDRect(0, 0, Math.sqrt(P.size()), Math.sqrt(P.size()));
 
-        // Retornamos una hoja con el punto dado
-        if (P.size() == 1) {
-            return new KDNode(P.get(0));
-        }
-
-        // Necesitamos dividir el conjunto de puntos dado cierto criterio
-        double splitPoint = splitMethod.getSplitPoint(P, splitaxis);
-
-        ArrayList[] splittedPoints = split(P, splitPoint, splitaxis);
-
-        root.left = construirKDTree(splittedPoints[0], !splitaxis);
-        root.right = construirKDTree(splittedPoints[1], !splitaxis);
+        root = new KDNode(P, splitaxis, rect);
 
         return root;
     }
 
-    public ArrayList[] split(List<KDPoint> p, double splitPoint, boolean splitaxis) {
+    public KDPoint vecinoMasCercano(KDPoint q) {
+        return search.vecinoMasCercano(root, q);
+    }
+
+    public static ArrayList[] split(List<KDPoint> p, double splitPoint, boolean splitaxis) {
 
         ArrayList[] lists = {new ArrayList<KDPoint>(), new ArrayList<KDPoint>()};
 
@@ -59,11 +53,19 @@ public class KDTree {
         return root;
     }
 
-    public KDNode getRoot() {
-        return root;
+    public boolean isCloseEnough() {
+        return false;
     }
 
-    public void setRoot(KDNode root) {
-        this.root = root;
+    public static void main(String[] args) {
+        List<KDPoint> P = new ArrayList<KDPoint>();
+        for (int i = 0; i < 10; i++) {
+            P.add(new KDPoint(Math.random()*Math.sqrt(P.size()), Math.random()*Math.sqrt(P.size())));
+        }
+
+        KDTree tree = new KDTree(new MedianKDTree());
+        tree.construirKDTree(P, KDAxis.horizontal);
+
+        int a = 3;
     }
 }

@@ -1,17 +1,17 @@
 package cl.dcc;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class MeanKDTree extends SplitMethod{
+public class MeanKDTree extends SplitMethod {
     public double getSplitPoint(List<KDPoint> P, boolean splitaxis) {
 
-        double mean = 0;
+        double min = Double.MAX_VALUE, max = Double.MIN_VALUE;
         for (int i = P.size(); i > 0; i--) {
             KDPoint point = P.get(i);
-            mean += point.getCoord(splitaxis);
+            min = Math.min(min, point.getCoord(splitaxis));
+            max = Math.max(max, point.getCoord(splitaxis));
         }
 
-        return mean /= P.size();
+        return (min + max) / 2;
     }
 }
