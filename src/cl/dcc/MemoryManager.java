@@ -74,7 +74,11 @@ public class MemoryManager {
                 // libero el espacio de ese nodo en memoria principal
                 long exit = priority.pollLast();
                 KDNode temp = elements.get(exit);
-                temp.writeToBuffer(buffer);
+
+                temp.writeToBuffer(buffer); // TODO
+
+
+
                 writeBlockToFile(buffer, temp.getMyFilePos());
                 bufWasModified.remove(exit);
                 elements.remove(exit);
@@ -120,8 +124,12 @@ public class MemoryManager {
         KDNode exitNode = elements.get(exit);
 
         if(bufWasModified.get(exit)){
+
+
             // Guardamos en disco antes de eliminar si es distinto a lo que esta en memoria secundaria
-            exitNode.writeToBuffer(buffer);
+            exitNode.writeToBuffer(buffer); // TODO
+
+
             writeBlockToFile(buffer, exit);
         }
 
@@ -176,4 +184,28 @@ public class MemoryManager {
         priority.remove(elmt);
         priority.offerFirst(elmt);
     }
+
+    /*
+    * Escribe en el buffer un nodo completo con el formato especificado comenzando en el byte start (myPagePos)
+    *
+    * */
+    private void writeToBuffer(KDNode nodo, byte [] buffer) throws IOException {
+
+        // FilePosicion
+        file.writeLong(nodo.getMyFilePos());
+
+        // Internal Node Data
+        nodo.getLeft();
+        nodo.getRight();
+        nodo.getAxis();
+
+        // Leaf data (x,y)
+        file.writeDouble(nodo.getPoint().getX());
+        file.writeDouble(nodo.getPoint().getY());
+
+        // Bounding rectangle
+        nodo.getKDRect();
+
+    }
+
 }
