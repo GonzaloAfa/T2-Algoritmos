@@ -10,6 +10,8 @@ public class Main {
 
         KDTree tree = new KDTree(new MeanKDTree());
         tree.construirKDTree(points, KDAxis.horizontal);
-	// write your code here
+
+    	// write your code here
     }
+
 }
