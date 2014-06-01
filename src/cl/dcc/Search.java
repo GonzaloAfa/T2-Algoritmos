@@ -9,7 +9,7 @@ public class Search {
     static KDPoint mejorActual;
 
     public Search(){
-        distActual = 0;
+        distActual = Double.MAX_VALUE;
         mejorActual = null;
     }
 
@@ -20,13 +20,13 @@ public class Search {
             checkIfBest(node.getPoint(), q);
             return mejorActual;
         } else if (node.greaterThanAxis(q)) {
-            vecinoMasCercano(node.getLeft(), q);
-            farNode = node.getRight();
-        } else {
             vecinoMasCercano(node.getRight(), q);
             farNode = node.getLeft();
+        } else {
+            vecinoMasCercano(node.getLeft(), q);
+            farNode = node.getRight();
         }
-        if (farNode.isCloseEnough())
+        if (farNode.isCloseEnough(q,distActual))
             vecinoMasCercano(farNode, q);
 
         return mejorActual;

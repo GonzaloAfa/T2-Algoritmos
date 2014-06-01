@@ -53,8 +53,8 @@ public class KDNode {
         return left == null && right == null;
     }
 
-    public boolean isCloseEnough() {
-        return false;
+    public boolean isCloseEnough(KDPoint q, double distActual) {
+        return getRect().intersects(q, distActual);
     }
 
     public void setLeft(KDNode left) {
@@ -90,5 +90,9 @@ public class KDNode {
         if (isLeaf())
             return "Leaf: " + point;
         return "Node: " + axis + "\n\t" + left + "\n\t" + right;
+    }
+
+    public KDRect getRect() {
+        return rect;
     }
 }

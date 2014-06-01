@@ -8,9 +8,9 @@ public class KDRect {
 
     /**
      * yf    .  -  -  -  -  - .
-     * |                |
-     * |                |
-     * |                |
+     * |        A       |
+     * |B              C|
+     * |        D       |
      * yi   |  -  -  -  -  - .
      * xi              xf
      */
@@ -76,5 +76,18 @@ public class KDRect {
 
     public String toString() {
         return "Rect: [" + xi + ", " + yi + ", " + xf + ", " + yf + "]";
+    }
+
+    public boolean intersects(KDPoint q, double distActual) {
+        return intersectHorizontal(q, distActual, true) || intersectHorizontal(q, distActual, false) ||
+                intersectVertical(q, distActual, true) || intersectVertical(q, distActual, false);
+    }
+
+    private boolean intersectHorizontal(KDPoint q, double distActual, boolean upper) {
+        return q.getX() >= xi && q.getX() <= xf && Math.abs(q.getY() - (upper ? yf : yi)) <= distActual;
+    }
+
+    private boolean intersectVertical(KDPoint q, double distActual, boolean left) {
+        return q.getY() >= yi && q.getY() <= yf && Math.abs(q.getX() - (left ? xi : xf)) <= distActual;
     }
 }

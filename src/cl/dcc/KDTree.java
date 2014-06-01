@@ -60,7 +60,7 @@ public class KDTree {
     public static void main(String[] args) {
         List<KDPoint> P = new ArrayList<KDPoint>();
         for (int i = 0; i < 10; i++) {
-            P.add(new KDPoint(Math.random()*Math.sqrt(P.size()), Math.random()*Math.sqrt(P.size())));
+            P.add(new KDPoint(Math.random() * Math.sqrt(P.size()), Math.random() * Math.sqrt(P.size())));
         }
 
         KDTree tree = new KDTree(new MedianKDTree());
