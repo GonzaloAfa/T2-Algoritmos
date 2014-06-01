@@ -18,6 +18,7 @@ public class ConstructionKDTree {
     }
 
     public String getData(){
+
         String data =
                 this.sizeArray +";"+
                 this.timeConstruction+";"+
@@ -28,19 +29,19 @@ public class ConstructionKDTree {
     }
 
 
-    public void setTimeConstruction(long timeConstruction) {
+    public void addTimeConstruction(long timeConstruction) {
         this.timeConstruction = timeConstruction;
     }
 
-    public void setHeight(long height) {
+    public void addHeight(long height) {
         this.height = height;
     }
 
-    public void setSpaceDisk(long spaceDisk) {
+    public void addSpaceDisk(long spaceDisk) {
         this.spaceDisk = spaceDisk;
     }
 
-    public void setAccessDisk(long accessDisk) {
+    public void addAccessDisk(long accessDisk) {
         this.accessDisk = accessDisk;
     }
 }
