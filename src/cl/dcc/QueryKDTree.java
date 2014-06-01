@@ -14,6 +14,7 @@ public class QueryKDTree {
     private int     repetitions;
     private double  error;
     private double  average;
+    private double  averageAccess;
 
 
     public QueryKDTree(long sizeArray){
@@ -23,6 +24,7 @@ public class QueryKDTree {
         this.accessDisk     = 0;
         this.repetitions    = 0;
         this.average        = 0;
+        this.averageAccess  = 0;
         this.error          = 0;
     }
 
@@ -32,7 +34,8 @@ public class QueryKDTree {
                 "Tiempo;"+
                 "Accesos;"+
                 "Repeticiones;"+
-                "promedio;"+
+                "PromedioTiempo;"+
+                "PromedioAcceso;"+
                 "Error;";
         return data;
     }
@@ -44,6 +47,7 @@ public class QueryKDTree {
                 this.accessDisk+";"+
                 this.repetitions+";"+
                 this.average+";"+
+                this.averageAccess+";"+
                 this.error+";";
         return data;
     }
@@ -63,6 +67,10 @@ public class QueryKDTree {
 
     public void addAverage(double average) {
         this.average = average;
+    }
+
+    public void addAverageAccess(double averageAccess) {
+        this.averageAccess = averageAccess;
     }
 
     public void addRepetitions(int repetitions) {

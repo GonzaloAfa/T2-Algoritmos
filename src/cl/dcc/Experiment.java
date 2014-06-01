@@ -87,4 +87,24 @@ public class Experiment {
     }
 
 
+    public String getName() {
+        return name;
+    }
+
+    public String getTypeSequence() {
+        return typeSequence;
+    }
+
+    public String getReport(){
+        String result = "";
+
+        result = query.get(0).getHeader();
+        for (QueryKDTree temp: query){
+            result = result + temp.getData()+"\n";
+        }
+
+
+
+        return result;
+    }
 }
