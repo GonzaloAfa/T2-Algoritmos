@@ -26,7 +26,10 @@ public class Search {
             vecinoMasCercano(node.getLeft(), q);
             farNode = node.getRight();
         }
-        if (farNode.isCloseEnough(q,distActual))
+        
+        if (farNode.isLeaf())
+            checkIfBest(farNode.getPoint(), q);
+        else if(farNode.isCloseEnough(q,distActual))
             vecinoMasCercano(farNode, q);
 
         return mejorActual;
