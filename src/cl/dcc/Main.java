@@ -24,5 +24,4 @@ public class Main {
             System.out.println("Distancia a punto " + i + " [" + P.get(i) + "]: " + P.get(i).distTo(q));
         }
     }
-
 }

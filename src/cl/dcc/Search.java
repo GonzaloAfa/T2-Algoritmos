@@ -8,9 +8,12 @@ public class Search {
     static double distActual;
     static KDPoint mejorActual;
 
+    private double searchTime;
+
     public Search(){
         distActual = Double.MAX_VALUE;
         mejorActual = null;
+        searchTime = 0;
     }
 
     public KDPoint vecinoMasCercano(KDNode node, KDPoint q) {

@@ -34,6 +34,10 @@ public class KDTree {
         return search.vecinoMasCercano(root, q);
     }
 
+    public double getUsedSpace(){
+        return root.getNodeCount()*root.getNodeSize();
+    }
+
     public static ArrayList[] split(List<KDPoint> p, double splitPoint, boolean splitaxis) {
 
         ArrayList[] lists = {new ArrayList<KDPoint>(), new ArrayList<KDPoint>()};

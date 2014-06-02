@@ -20,13 +20,16 @@ import java.util.List;
 
 public class KDNode {
 
+    private final static int BOOLEAN = 1;
+    private final static int INT     = 4;
+    private final static int FLOAT   = 4;
+    private final static int DOUBLE  = 8;
+    private final static int LONG    = 8;
 
-    int BOOLEAN = 1;
-    int INT     = 4;
-    int FLOAT   = 4;
-    int DOUBLE  = 8;
-    int LONG    = 8;
-
+    // 2 Punteros a izquierdo y derecho, 1 booleano y un double para el eje, 2 double para el punto,
+    // 4 double para el rectangulo y 2 enteros para el número de nodos
+    private final static double nodeSize = DOUBLE*2 + BOOLEAN + DOUBLE + DOUBLE*2 + DOUBLE*4
+            + INT + DOUBLE;
 
     // FilePosicion
     private long myFilePos;
@@ -41,6 +44,7 @@ public class KDNode {
     // Bounding rectangle
     protected KDRect rect;
 
+    private int height, nodeCount;
 
     public KDNode(KDAxis kdAxis) {
         axis = kdAxis;
@@ -50,6 +54,8 @@ public class KDNode {
         // Retornamos una hoja con el punto dado
         if (P.size() == 1) {
             point = P.get(0);
+            height = 1;
+            nodeCount = 1;
             return;
         }
 
@@ -67,6 +73,9 @@ public class KDNode {
 
         setLeft(new KDNode(splittedPoints[0], !splitaxis, boundingRects[0]));
         setRight(new KDNode(splittedPoints[1], !splitaxis, boundingRects[1]));
+
+        height = 1 + Math.max(left.getHeight(), right.getHeight());
+        nodeCount = 1 + left.getNodeCount() + right.getNodeCount();
     }
 
     public KDNode(byte [] buffer) {
@@ -188,5 +197,17 @@ public class KDNode {
         ByteBuffer.wrap(buffer, ini, FLOAT).putFloat(myFilePos);
         ini= ini+FLOAT; //dejo el puntero al final del campo myFilePos
 
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getNodeCount() {
+        return nodeCount;
+    }
+
+    public static double getNodeSize() {
+        return nodeSize;
     }
 }
