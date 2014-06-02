@@ -17,7 +17,7 @@ public class Search {
         KDNode farNode = null;
 
         if (node.isLeaf()) {
-            checkIfBest(node.getPoint(), q);
+            updateIfBest(node.getPoint(), q);
             return mejorActual;
         } else if (node.greaterThanAxis(q)) {
             vecinoMasCercano(node.getRight(), q);
@@ -28,14 +28,14 @@ public class Search {
         }
         
         if (farNode.isLeaf())
-            checkIfBest(farNode.getPoint(), q);
+            updateIfBest(farNode.getPoint(), q);
         else if(farNode.isCloseEnough(q,distActual))
             vecinoMasCercano(farNode, q);
 
         return mejorActual;
     }
 
-    public boolean checkIfBest(KDPoint point, KDPoint q) {
+    public boolean updateIfBest(KDPoint point, KDPoint q) {
         double dist = point.distTo(q);
         if (dist < distActual) {
             mejorActual = point;

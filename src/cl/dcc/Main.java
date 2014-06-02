@@ -15,11 +15,14 @@ public class Main {
         tree.construirKDTree(P, KDAxis.horizontal);
 
         KDPoint q = new KDPoint(Math.random() * Math.sqrt(P.size()),
-                                Math.random() * Math.sqrt(P.size()));
+                Math.random() * Math.sqrt(P.size()));
 
-        tree.vecinoMasCercano(q);
+        KDPoint result = tree.vecinoMasCercano(q);
 
-        int a = 3;
+        System.out.println("Vecino más cercano a Q [" + q + "]: " + result);
+        for (int i = 0; i < 10; i++) {
+            System.out.println("Distancia a punto " + i + " [" + P.get(i) + "]: " + P.get(i).distTo(q));
+        }
     }
 
 }

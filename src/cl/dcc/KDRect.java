@@ -27,16 +27,17 @@ public class KDRect {
         KDRect[] rects = new KDRect[2];
 
         rects[0] = new KDRect(xi, yi, xf, yf);
-        rects[1] = new KDRect(xi, yi, yf, yf);
+        rects[1] = new KDRect(xi, yi, xf, yf);
 
         if (axis.getSplitaxis() == KDAxis.horizontal) {
             // Dividimos horizontalmente
             rects[0].setMaxX(axis.getValue());
             rects[1].setMinX(axis.getValue());
         } else {
-            // Dividimos verticalmente. Left corresponde al sector de arriba
-            rects[0].setMinY(axis.getValue());
-            rects[1].setMaxY(axis.getValue());
+            // Dividimos verticalmente. Left corresponde al sector de abajo
+            rects[0].setMaxY(axis.getValue());
+            rects[1].setMinY(axis.getValue());
+
         }
 
         return rects;
@@ -79,8 +80,12 @@ public class KDRect {
     }
 
     public boolean intersects(KDPoint q, double distActual) {
-        return intersectHorizontal(q, distActual, true) || intersectHorizontal(q, distActual, false) ||
+        return isInside(q, distActual) || intersectHorizontal(q, distActual, true) || intersectHorizontal(q, distActual, false) ||
                 intersectVertical(q, distActual, true) || intersectVertical(q, distActual, false);
+    }
+
+    private boolean isInside(KDPoint q, double distActual) {
+        return q.getX()>=xi && q.getX()<=xf && q.getY()>=yi && q.getY()<=yf;
     }
 
     private boolean intersectHorizontal(KDPoint q, double distActual, boolean upper) {
