@@ -7,16 +7,20 @@ public class ConstructionKDTree {
 
     private long    sizeArray;
 
-    private long    timeConstruction;
+    private long    repetitions;
+
+    private long    time;
     private long    height;
     private long    spaceDisk;
     private long    accessDisk;
 
-    private long    repetitions;
+
     private double  error;
-    private double  average;
-    private double  averageAccess;
-    private long time;
+
+    private double  averageTime;
+    private double  averageHeight;
+    private double  averageSpaceDisk;
+    private double  averageAccessDisk;
 
 
     public ConstructionKDTree(long sizeArray){
@@ -29,10 +33,10 @@ public class ConstructionKDTree {
     }
 
     public String getData(){
-
+        // TODO: falta agregar los valores promedios
         String data =
                 this.sizeArray +";"+
-                this.timeConstruction+";"+
+                this.time+";"+
                 this.height+";"+
                 this.spaceDisk+";"+
                 this.accessDisk;
@@ -41,8 +45,12 @@ public class ConstructionKDTree {
 
 
 
-    public void addTimeConstruction(long timeConstruction) {
-        this.timeConstruction = timeConstruction;
+    public long getTime() {
+        return time;
+    }
+
+    public void addTime(long time) {
+        this.time = time;
     }
 
     public void addHeight(long height) {
@@ -73,27 +81,39 @@ public class ConstructionKDTree {
         this.error = error;
     }
 
-    public double getAverage() {
-        return average;
+    public double getAverageTime() {
+        return averageTime;
     }
 
-    public void addAverage(double average) {
-        this.average = average;
+    public void addAverageTime(double averageTime) {
+        this.averageTime = averageTime;
     }
 
-    public double getAverageAccess() {
-        return averageAccess;
+    public double getHeight() {
+        return height;
     }
 
-    public void addAverageAccess(double averageAccess) {
-        this.averageAccess = averageAccess;
+    public void addAverageHeight(double averageHeight) {
+        this.averageHeight = averageHeight;
     }
 
-    public long getSizeArray() {
+    public double getSpaceDisk() {
+        return spaceDisk;
+    }
+
+    public void addAverageSpaceDisk(double averageSpaceDisk) {
+        this.averageSpaceDisk = averageSpaceDisk;
+    }
+
+    public double getAccessDisk() {
+        return accessDisk;
+    }
+
+    public void addAverageAccessDisk(double averageAccessDisk) {
+        this.averageAccessDisk = averageAccessDisk;
+    }
+
+    public long getSizeArray(){
         return sizeArray;
-    }
-
-    public long getTime() {
-        return time;
     }
 }

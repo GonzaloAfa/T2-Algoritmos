@@ -48,33 +48,36 @@ public class Main {
 
                         // Datos del experimento
                         ConstructionKDTree construction = new ConstructionKDTree(size);
+
                         construction.addRepetitions(k);
-                        //construction.addHeight();
-                        //construction.addSpaceDisk();
-                        construction.addTimeConstruction(time);
+
+                        construction.addTime(time);
+
+                        // TODO: incorporar Altura y espacio
+//                      construction.addHeight();
+//                      construction.addSpaceDisk();
+//                      construction.addAccessDisk();
 
                         // statistic
                         statistic[i][j].addConstruction(construction);
 
 
                         if ( k >= 3 ){
-                            statistic[i][j].isLowError();
+                            if (statistic[i][j].isLowError())
+                                break;
                         }
                     }
 
-
-
-
-
+                    DataReport dataReport = new DataReport(statistic[i][j], false);
+                    dataReport.makeReport();
                 }
-
-
-
-
             }
 
 
+
+
         }
+
 
         /*
 

@@ -13,6 +13,7 @@ public class QueryStatistics extends Statistics{
 
     private double  totalTime;
 
+
     public QueryStatistics(String name, String partition, String typeSequence) {
         super(name,partition,typeSequence);
         this.query          = new ArrayList<QueryKDTree>();
@@ -30,12 +31,12 @@ public class QueryStatistics extends Statistics{
 
 
         // Calculamos los datos estadisticos
-        this.average = totalTime/repetitions;
+        this.averageTime = totalTime/repetitions;
         this.error = standardDeviation(listTime, data.getTime());
 
 
         // Agregamos los datos estadisticos al Pojo
-        data.addAverage(this.average);
+        data.addAverage(this.averageTime);
         data.addError(this.error);
 
         this.query.add(data);
@@ -66,5 +67,11 @@ public class QueryStatistics extends Statistics{
         }
 
         return result;
+    }
+
+    public String getSummary() {
+        String summary = "";
+        // TODO crear resumen
+        return summary;
     }
 }

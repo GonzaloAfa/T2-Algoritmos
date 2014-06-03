@@ -13,8 +13,11 @@ public class DataReport {
     private PrintWriter writer, summary;
     public boolean console;
 
+    private Statistics statistics;
 
-    public DataReport(QueryStatistics experiment , boolean console) {
+    public DataReport(Statistics statistics , boolean console) {
+
+        this.statistics = statistics;
 
         // First create the folder
         File theDir = new File("Results");
@@ -22,7 +25,8 @@ public class DataReport {
             theDir.mkdir();
 
 
-        String filename = "Results/" + experiment.getName() + "-" + experiment.getTypeSequence();
+        String filename = "Results/" + statistics.getName() + " - "
+                +statistics.getPartition()+" - " + statistics.getTypeSequence();
         this.console = console;
 
         try {
@@ -34,10 +38,11 @@ public class DataReport {
         }
     }
 
-    public void makeReport(QueryStatistics experiment) {
-        writer.println("" + experiment.getReport());
+    public void makeReport() {
+        writer.println("" + this.statistics.getReport());
+        summary.println("" + this.statistics.getSummary());
         if (console)
-            System.out.println("" + experiment.getReport());
+            System.out.println("" + statistics.getSummary());
     }
 
 
