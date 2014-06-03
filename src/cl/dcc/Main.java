@@ -4,7 +4,6 @@ public class Main {
 
     public static void main(String[] args) {
 
-
         // Experimento en memoria principal
         int minSizeArray    = 10;
         int maxSizeArray    = 20;
@@ -80,6 +79,9 @@ public class Main {
 
 
         /*
+        List<KDPoint> P = new ArrayList<KDPoint>();
+        for (int i = 0; i < 100; i++) {
+            P.add(new KDPoint(Math.random() * Math.sqrt(P.size()), Math.random() * Math.sqrt(P.size())));
 
         KDPoint q = new KDPoint(Math.random() * Math.sqrt(P.size()),
                 Math.random() * Math.sqrt(P.size()));

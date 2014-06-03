@@ -1,34 +1,33 @@
 package cl.dcc;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * Created by Ian on 27-05-2014.
- *
- *
+ * <p/>
+ * <p/>
  * --------------------------------------------------------------------------------------------------------------------------
  * | myFilePos   | left  | right | axis  | point | rect  |
  * --------------------------------------------------------------------------------------------------------------------------
  * | B           | B     | B     | B     | B     | B     |
-
  */
 
 
 public class KDNode {
 
     private final static int BOOLEAN = 1;
-    private final static int INT     = 4;
-    private final static int FLOAT   = 4;
-    private final static int DOUBLE  = 8;
-    private final static int LONG    = 8;
+    private final static int INT = 4;
+    private final static int FLOAT = 4;
+    private final static int DOUBLE = 8;
+    private final static int LONG = 8;
 
     // 2 Punteros a izquierdo y derecho, 1 booleano y un double para el eje, 2 double para el punto,
     // 4 double para el rectangulo y 2 enteros para el número de nodos
-    private final static double nodeSize = DOUBLE*2 + BOOLEAN + DOUBLE + DOUBLE*2 + DOUBLE*4
+    private final static double nodeSize = DOUBLE * 2 + BOOLEAN + DOUBLE + DOUBLE * 2 + DOUBLE * 4
             + INT + DOUBLE;
 
     // FilePosicion
@@ -61,10 +60,12 @@ public class KDNode {
 
         // Marcamos los límites de este nodo interno
         rect = bounds;
+        double[] array = KDPoint.toCoordArray(P, splitaxis);
+        Arrays.sort(array);
+        double med = array[(int) array.length / 2];
 
         // Necesitamos dividir el conjunto de puntos dado cierto criterio
         double splitPoint = KDTree.splitMethod.getSplitPoint(P, splitaxis);
-
         axis = new KDAxis(splitPoint, splitaxis);
 
         ArrayList[] splittedPoints = KDTree.split(P, splitPoint, splitaxis);
@@ -78,16 +79,16 @@ public class KDNode {
         nodeCount = 1 + left.getNodeCount() + right.getNodeCount();
     }
 
-    public KDNode(byte [] buffer) {
-       // TODO: Completar el KDNode
+    public KDNode(byte[] buffer) {
+        // TODO: Completar el KDNode
 
-        int ini= 0;
+        int ini = 0;
 
         double x = ByteBuffer.wrap(buffer, ini, DOUBLE).getDouble();
-        ini=+DOUBLE;
+        ini = +DOUBLE;
 
         double y = ByteBuffer.wrap(buffer, ini, DOUBLE).getDouble();
-        ini=+DOUBLE;
+        ini = +DOUBLE;
 
         point.setX(x);
         point.setY(y);
@@ -160,22 +161,21 @@ public class KDNode {
         this.myFilePos = myFilePos;
     }
 
-    public KDRect getKDRect(){
+    public KDRect getKDRect() {
         return rect;
     }
 
-    public void writeToBuffer(byte [] buffer) throws IOException {
+    public void writeToBuffer(byte[] buffer) throws IOException {
         // TODO: Terminar esto
 
-        int ini= 0;
+        int ini = 0;
 
         // KDPoint
         ByteBuffer.wrap(buffer, ini, DOUBLE).putDouble(point.getX());
-        ini= ini+DOUBLE; //dejo el puntero al final de getX
+        ini = ini + DOUBLE; //dejo el puntero al final de getX
 
         ByteBuffer.wrap(buffer, ini, DOUBLE).putDouble(point.getY());
-        ini= ini+DOUBLE; //dejo el puntero al final de getY
-
+        ini = ini + DOUBLE; //dejo el puntero al final de getY
 
 
         // TODO KDNode Left
@@ -187,7 +187,6 @@ public class KDNode {
 //        ini= ini+FLOAT; //dejo el puntero al final de Right
 
 
-
         // TODO KDAxis axis
 //        ByteBuffer.wrap(buffer, ini, FLOAT).putLong(right);
 //        ini= ini+FLOAT; //dejo el puntero al axis
@@ -195,7 +194,7 @@ public class KDNode {
 
         // MyFilePos
         ByteBuffer.wrap(buffer, ini, FLOAT).putFloat(myFilePos);
-        ini= ini+FLOAT; //dejo el puntero al final del campo myFilePos
+        ini = ini + FLOAT; //dejo el puntero al final del campo myFilePos
 
     }
 
