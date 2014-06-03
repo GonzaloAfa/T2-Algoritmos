@@ -10,7 +10,7 @@ import java.util.List;
 public class KDTree {
 
     KDNode root;
-    Search search = new Search();
+    Search search;
 
     public static SplitMethod splitMethod;
 
@@ -31,6 +31,7 @@ public class KDTree {
     }
 
     public KDPoint vecinoMasCercano(KDPoint q) {
+        search = new Search();
         return search.vecinoMasCercano(root, q);
     }
 

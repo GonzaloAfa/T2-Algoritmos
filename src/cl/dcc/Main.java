@@ -7,7 +7,7 @@ public class Main {
 
     public static void main(String[] args) {
         List<KDPoint> P = new ArrayList<KDPoint>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             P.add(new KDPoint(Math.random() * Math.sqrt(P.size()), Math.random() * Math.sqrt(P.size())));
         }
 
