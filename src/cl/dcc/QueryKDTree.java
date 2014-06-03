@@ -3,7 +3,7 @@ package cl.dcc;
 /**
  * Created by Gonzaloafa on 01-06-2014.
  */
-public class QueryKDTree {
+public class QueryKDTree{
 
     private long sizeArray;
 
@@ -11,7 +11,7 @@ public class QueryKDTree {
     private long accessDisk;
 
 
-    private int     repetitions;
+    private long    repetitions;
     private double  error;
     private double  average;
     private double  averageAccess;
@@ -57,6 +57,10 @@ public class QueryKDTree {
         this.sizeArray = sizeArray;
     }
 
+    public void addRepetitions(long repetitions) {
+        this.repetitions = repetitions;
+    }
+
     public void addTimeQuery(long timeQuery) {
         this.timeQuery = timeQuery;
     }
@@ -64,6 +68,8 @@ public class QueryKDTree {
     public void addAccessDisk(long accessDisk) {
         this.accessDisk = accessDisk;
     }
+
+
 
     public void addAverage(double average) {
         this.average = average;
@@ -73,20 +79,18 @@ public class QueryKDTree {
         this.averageAccess = averageAccess;
     }
 
-    public void addRepetitions(int repetitions) {
-        this.repetitions = repetitions;
+    public void addError(double error) {
+        this.error = error;
     }
+
+
 
     public double getError() {
         return error;
     }
 
-    public int getRepetitions() {
+    public long getRepetitions() {
         return repetitions;
-    }
-
-    public void addError(double error) {
-        this.error = error;
     }
 
     public long getTime(){
@@ -96,7 +100,6 @@ public class QueryKDTree {
     public double getAverage() {
         return average;
     }
-
 
     public long getSizeArray(){
         return sizeArray;

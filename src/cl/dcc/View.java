@@ -39,8 +39,8 @@ public class View extends JPanel {
 
 
 
-        GeneratePoint point = new GeneratePoint(0, 500);
-        List<KDPoint> kdPoints = point.random(3000);
+        GeneratePoint point = new LowDiscrepancyGenerate(0, 500);
+        List<KDPoint> kdPoints = point.generate(3000);
 
         frame.add(new PointsView(kdPoints));
 

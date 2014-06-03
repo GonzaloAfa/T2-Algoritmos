@@ -14,7 +14,7 @@ public class DataReport {
     public boolean console;
 
 
-    public DataReport(Experiment experiment , boolean console) {
+    public DataReport(QueryStatistics experiment , boolean console) {
 
         // First create the folder
         File theDir = new File("Results");
@@ -34,7 +34,7 @@ public class DataReport {
         }
     }
 
-    public void makeReport(Experiment experiment) {
+    public void makeReport(QueryStatistics experiment) {
         writer.println("" + experiment.getReport());
         if (console)
             System.out.println("" + experiment.getReport());

@@ -6,28 +6,15 @@ import java.util.List;
 /**
  * Created by Gonzaloafa on 31-05-2014.
  */
-public class Experiment {
+public class QueryStatistics extends Statistics{
 
-
-    private String  name;
-    private String  typeSequence;
 
     private List<QueryKDTree> query;
 
-    private int     repetitions;
-    private double  error;
-    private double  average;
     private double  totalTime;
 
-    public Experiment(String name, String typeSequence) {
-
-        this.name           = name;
-        this.typeSequence   = typeSequence;
-
-        this.repetitions    = 0;
-        this.average        = 0;
-        this.totalTime      = 0;
-
+    public QueryStatistics(String name, String partition, String typeSequence) {
+        super(name,partition,typeSequence);
         this.query          = new ArrayList<QueryKDTree>();
     }
 
@@ -38,37 +25,20 @@ public class Experiment {
         List<Long> listTime = data(data.getSizeArray());
 
         // Actualizamos valores
-        this.repetitions = data.getRepetitions();
-        this.totalTime=+data.getTime();
+        this.repetitions= data.getRepetitions();
+        this.totalTime =+data.getTime();
+
 
         // Calculamos los datos estadisticos
         this.average = totalTime/repetitions;
         this.error = standardDeviation(listTime, data.getTime());
+
 
         // Agregamos los datos estadisticos al Pojo
         data.addAverage(this.average);
         data.addError(this.error);
 
         this.query.add(data);
-    }
-
-
-    public boolean isLowError(){
-        return  (this.error < 0.05) ? true : false;
-    }
-
-
-
-    private double standardDeviation(List<Long> listTime, long lastTime) {
-
-        double sum = 0;
-
-        for (long time : listTime){
-            sum +=Math.pow(time - average , 2);
-        }
-        sum+= Math.pow(lastTime - average, 2);
-
-        return Math.sqrt(sum / repetitions - 1);
     }
 
 
@@ -82,28 +52,18 @@ public class Experiment {
                 this.totalTime = temp.getTime();
             }
         }
-
         return listTime;
     }
 
 
-    public String getName() {
-        return name;
-    }
-
-    public String getTypeSequence() {
-        return typeSequence;
-    }
 
     public String getReport(){
         String result = "";
 
-        result = query.get(0).getHeader();
+        result = query.get(0).getHeader()+"\n";
         for (QueryKDTree temp: query){
             result = result + temp.getData()+"\n";
         }
-
-
 
         return result;
     }

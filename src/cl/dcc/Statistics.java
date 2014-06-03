@@ -1,79 +1,68 @@
 package cl.dcc;
 
+import java.util.List;
+
 /**
- * Created by Gonzaloafa on 31-05-2014.
+ * Created by Gonzaloafa on 02-06-2014.
  */
-import java.util.ArrayList;
+public class Statistics {
 
-class Statistics {
+    protected String name;
+    protected String typeSequence;
+    protected String partition;
 
-    private int arraySize;
+    protected long  repetitions;
+    protected long  totalTime;
+    protected double average;
+    protected double error;
 
-    ArrayList<AlgorithmStatistic> evaluations;
 
-    public double error, meanTime, devStd, meanComparisons;
-    public int repetitions;
-    private AlgorithmStatistic currentEvaluation;
+    public Statistics(String name, String partition, String typeSequence){
+        this.name           = name;
+        this.partition      = partition;
+        this.typeSequence   = typeSequence;
 
-    public Statistics(int arraySize) {
-        evaluations = new ArrayList<AlgorithmStatistic>(1000);
-        this.arraySize = arraySize;
+        this.repetitions    = 0;
+        this.average        = 0;
+        this.totalTime      = 0;
+
     }
 
-    public void updateMeasurement(Algorithms algorithm, int replay) {
-        long comparisons = algorithm.getComparisons();
-        double executionTime = algorithm.getExecutionTime();
+    public String getName() {
+        return name;
+    }
 
-        currentEvaluation = new AlgorithmStatistic(comparisons, executionTime);
-        repetitions = replay;
+    public String getPartition() {
+        return typeSequence;
+    }
 
-        evaluations.add(currentEvaluation);
+    public String getTypeSequence() {
+        return typeSequence;
+    }
 
-        meanTime = computeMeanTime();
-        meanComparisons = computeMeanComparisons();
+    public void addConstruction(ConstructionKDTree data){
+    }
 
-        if (replay > 1) {
-            devStd = standardDeviation();
-            error = devStd * 100 / meanTime;
+    public void addQuery(QueryKDTree data){
+    }
+
+
+
+    public boolean isLowError(){
+        return  (this.error < 0.05) ? true : false;
+    }
+
+
+    protected double standardDeviation(List<Long> data, long lastData) {
+
+        double sum = 0;
+        for (long time : data){
+            sum +=Math.pow(time - average , 2);
         }
+        sum+= Math.pow(lastData - average, 2);
+        return Math.sqrt(sum / repetitions - 1);
     }
 
-    public boolean doContinue() {
-        return error < (5 * meanTime);
-    }
 
-    public double computeMeanTime() {
-        double sum = 0;
-
-        for (AlgorithmStatistic measurement : evaluations)
-            sum += measurement.executionTime;
-
-        return sum / evaluations.size();
-    }
-
-    public double computeMeanComparisons() {
-        long sum = 0;
-
-        for (AlgorithmStatistic measurement : evaluations)
-            sum += measurement.comparisons;
-
-        return sum / evaluations.size();
-    }
-
-    public double standardDeviation() {
-
-        double sum = 0;
-
-        for (AlgorithmStatistic measurement : evaluations)
-            sum += Math.pow(measurement.executionTime - meanTime, 2);
-
-        return Math.sqrt(sum / (evaluations.size() - 1));
-    }
-
-    @Override
-    public String toString() {
-        return repetitions + ";" + error + ";" + arraySize + ";" + currentEvaluation
-                + ";" + meanComparisons + ";" + meanTime;
-    }
 
 }

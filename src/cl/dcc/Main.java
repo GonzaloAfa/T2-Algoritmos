@@ -1,18 +1,82 @@
 package cl.dcc;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Main {
 
     public static void main(String[] args) {
-        List<KDPoint> P = new ArrayList<KDPoint>();
-        for (int i = 0; i < 10; i++) {
-            P.add(new KDPoint(Math.random() * Math.sqrt(P.size()), Math.random() * Math.sqrt(P.size())));
+
+
+        // Experimento en memoria principal
+        int minSizeArray    = 10;
+        int maxSizeArray    = 20;
+
+        // Size Array
+        long sizeArray[] = new long[maxSizeArray - minSizeArray + 1];
+
+        // Init Array
+        for (int i = 0; i < sizeArray.length; i++)
+            sizeArray[i] = (long) Math.pow(2.0, (double) (minSizeArray + i));
+
+
+
+        Statistics statistic[][] = {
+              { new ConstructionStatistics("Memoria Principal", " Media",   "Random" ),
+                new ConstructionStatistics("Memoria Principal", " Media" ,  "Baja Discrepancia" )}
+                ,
+              { new ConstructionStatistics("Memoria Principal", " Mediana", "Random"),
+                new ConstructionStatistics("Memoria Principal", " Mediana", "Baja Discrepancia")}
+        };
+
+
+        for (long size : sizeArray ){
+
+            KDTree kdtree []        = {new KDTree(new MeanKDTree()), new KDTree(new MedianKDTree())};
+            GeneratePoint points [] = { new RandomGenerate(0, Math.sqrt(size)) ,new LowDiscrepancyGenerate(0, Math.sqrt(size))};
+
+            // Tipo de KDTree > Mean or Median
+            for (int i = 0; i < kdtree.length ; i++) {
+
+                // Tipo del GeneratePoint > Random or LowDiscrepancy
+                for (int j = 0; j < points.length ; j++) {
+
+                    // For de iteracion
+
+                    for (int k = 0; k < 1000 ; k++) {
+
+                        long start = System.nanoTime();
+                        kdtree[i].construirKDTree( points[j].generate(size) , KDAxis.horizontal);
+                        long time = System.nanoTime() - start;
+
+                        // Datos del experimento
+                        ConstructionKDTree construction = new ConstructionKDTree(size);
+                        construction.addRepetitions(k);
+                        //construction.addHeight();
+                        //construction.addSpaceDisk();
+                        construction.addTimeConstruction(time);
+
+                        // statistic
+                        statistic[i][j].addConstruction(construction);
+
+
+                        if ( k >= 3 ){
+                            statistic[i][j].isLowError();
+                        }
+                    }
+
+
+
+
+
+                }
+
+
+
+
+            }
+
+
         }
 
-        KDTree tree = new KDTree(new MedianKDTree());
-        tree.construirKDTree(P, KDAxis.horizontal);
+        /*
 
         KDPoint q = new KDPoint(Math.random() * Math.sqrt(P.size()),
                 Math.random() * Math.sqrt(P.size()));
@@ -23,6 +87,7 @@ public class Main {
         for (int i = 0; i < 10; i++) {
             System.out.println("Distancia a punto " + i + " [" + P.get(i) + "]: " + P.get(i).distTo(q));
         }
+        */
     }
 
 }
