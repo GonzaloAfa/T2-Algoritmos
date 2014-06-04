@@ -11,7 +11,7 @@ public class ConstructionKDTree {
 
     private long    time;
     private long    height;
-    private long    spaceDisk;
+    private double  spaceDisk;
     private long    accessDisk;
 
 
@@ -28,18 +28,34 @@ public class ConstructionKDTree {
     }
 
     public String getHeader(){
-        // TODO:
-        return "";
+        String data =   "sizeArray;"+
+                        "repetitions;"+
+                        "time;"+
+                        "error;"+
+                        "height;"+
+                        "spaceDisk;"+
+                        "accessDisk;"+
+                        "averageTime;"+
+                        "averageSpaceDisk;"+
+                        "averageAccessDisk;";
+
+        return data;
     }
 
     public String getData(){
-        // TODO: falta agregar los valores promedios
+
         String data =
                 this.sizeArray +";"+
+                this.repetitions+";"+
                 this.time+";"+
+                this.error+";"+
                 this.height+";"+
                 this.spaceDisk+";"+
-                this.accessDisk;
+                this.accessDisk+";"+
+                this.averageTime+";"+
+                this.averageHeight+";"+
+                this.averageSpaceDisk+";"+
+                this.averageAccessDisk;
         return data;
     }
 
@@ -57,7 +73,7 @@ public class ConstructionKDTree {
         this.height = height;
     }
 
-    public void addSpaceDisk(long spaceDisk) {
+    public void addSpaceDisk(double spaceDisk) {
         this.spaceDisk = spaceDisk;
     }
 

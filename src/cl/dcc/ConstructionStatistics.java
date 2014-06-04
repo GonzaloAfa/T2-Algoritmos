@@ -10,6 +10,7 @@ public class ConstructionStatistics extends Statistics{
 
     private List<ConstructionKDTree> construction;
 
+
     private double totalTime;
     private double totalHeight;
     private double totalSpaceDisk;
@@ -19,8 +20,7 @@ public class ConstructionStatistics extends Statistics{
     public ConstructionStatistics(String name, String partition, String typeSequence) {
         super(name, partition, typeSequence);
 
-        construction = new ArrayList<ConstructionKDTree>();
-
+        construction    = new ArrayList<ConstructionKDTree>();
         totalAccessDisk = 0;
         totalHeight     = 0;
         totalSpaceDisk  = 0;
@@ -50,7 +50,10 @@ public class ConstructionStatistics extends Statistics{
         construction.add(data);
     }
 
-
+    @Override
+    public String getHeader() {
+        return construction.get(0).getHeader()+"\n";
+    }
 
 
     private List<Long> listData(long sizeArray){
@@ -73,22 +76,27 @@ public class ConstructionStatistics extends Statistics{
     }
 
 
-
+    @Override
     public String getReport(){
         String result = "";
 
-        result = construction.get(0).getHeader()+"\n";
-        for (ConstructionKDTree temp: construction){
+        for (ConstructionKDTree temp: construction)
             result = result + temp.getData()+"\n";
-        }
 
         return result;
     }
 
+    @Override
     public String getSummary() {
-        String summary = "";
-        // TODO crear resumen
+        String summary = construction.get(construction.size()-1).getData()+"\n";
+        System.out.print(summary);
+
         return summary;
+    }
+
+    @Override
+    public void clean(){
+        construction.clear();
     }
 
 }

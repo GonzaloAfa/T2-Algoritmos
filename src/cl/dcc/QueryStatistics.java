@@ -8,7 +8,6 @@ import java.util.List;
  */
 public class QueryStatistics extends Statistics{
 
-
     private List<QueryKDTree> query;
 
     private double  totalTime;
@@ -56,12 +55,13 @@ public class QueryStatistics extends Statistics{
         return listTime;
     }
 
-
+    @Override
+    public String getHeader(){
+        return query.get(0).getHeader()+"\n";
+    }
 
     public String getReport(){
         String result = "";
-
-        result = query.get(0).getHeader()+"\n";
         for (QueryKDTree temp: query){
             result = result + temp.getData()+"\n";
         }
@@ -69,9 +69,15 @@ public class QueryStatistics extends Statistics{
         return result;
     }
 
+    @Override
     public String getSummary() {
-        String summary = "";
-        // TODO crear resumen
+        String summary = query.get(query.size()-1).getData();
+        System.out.println(summary);
         return summary;
+    }
+
+    @Override
+    public void clean() {
+        this.query.clear();
     }
 }

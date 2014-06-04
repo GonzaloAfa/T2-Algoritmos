@@ -39,8 +39,9 @@ public class DataReport {
     }
 
     public void makeReport() {
-        writer.println("" + this.statistics.getReport());
-        summary.println("" + this.statistics.getSummary());
+        writer.println(""   +this.statistics.getReport());
+        summary.println(""  +this.statistics.getSummary());
+
         if (console)
             System.out.println("" + statistics.getSummary());
     }
@@ -57,4 +58,8 @@ public class DataReport {
         writer.flush();
     }
 
+    public void makeHeader() {
+        writer.print(this.statistics.getHeader());
+        summary.print(this.statistics.getHeader());
+    }
 }

@@ -24,9 +24,6 @@ abstract class Statistics {
         this.typeSequence = typeSequence;
     }
 
-
-
-
     protected double standardDeviation(List<Long> data, long lastData) {
         double sum = 0;
         for (long time : data){
@@ -46,8 +43,10 @@ abstract class Statistics {
     public void addQuery(QueryKDTree data){
     }
 
+    public abstract String getHeader();
     public abstract String getReport();
     public abstract String getSummary();
+    public abstract void clean();
 
 
     public String getName() {
