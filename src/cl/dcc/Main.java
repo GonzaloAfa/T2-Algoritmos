@@ -7,7 +7,6 @@ public class Main {
 
     public static void main(String[] args) {
 
-
         // Experimento en memoria principal
         int minSizeArray    = 10;
         int maxSizeArray    = 15;
