@@ -34,7 +34,7 @@ abstract class Statistics {
     }
 
     public boolean isLowError(){
-        return  (this.error < 0.05);
+        return  (this.error < 5);
     }
 
     public void addConstruction(ConstructionKDTree data){

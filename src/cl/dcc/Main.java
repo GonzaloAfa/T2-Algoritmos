@@ -73,7 +73,7 @@ public class Main {
 
                     DataReport dataReport = new DataReport(statistic[i][j], false);
 
-                    if (i == 0 && j == 0)
+                    if (size == sizeArray[0] )
                         dataReport.makeHeader();
 
                     dataReport.makeReport();
@@ -151,7 +151,7 @@ public class Main {
 
                     query.addSizeArray(sizeArrayQuery);
                     query.addRepetitions(k);
-                    //                    query.addAccessDisk();
+                    //query.addAccessDisk();
                     query.addTimeQuery(timeTotal);
                     statisticQuery[i][j].addQuery(query);
 
@@ -164,9 +164,7 @@ public class Main {
 
                 DataReport dataReport = new DataReport(statisticQuery[i][j], false);
 
-                if (i == 0 && j == 0)
-                    dataReport.makeHeader();
-
+                dataReport.makeHeader();
                 dataReport.makeReport();
                 dataReport.flush();
                 dataReport.close();

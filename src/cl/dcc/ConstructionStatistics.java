@@ -21,6 +21,7 @@ public class ConstructionStatistics extends Statistics{
         super(name, partition, typeSequence);
 
         construction    = new ArrayList<ConstructionKDTree>();
+
         totalAccessDisk = 0;
         totalHeight     = 0;
         totalSpaceDisk  = 0;
@@ -32,45 +33,50 @@ public class ConstructionStatistics extends Statistics{
     public void addConstruction(ConstructionKDTree data){
 
         // Obtenemos valores que ya se han ingresado antes
-        List<Long> listTime = listData(data.getSizeArray());
+        List<Long> listTime = new ArrayList<Long>();
+
+        if ( data.getRepetitions() == 0)
+            listTime.add(data.getTime());
+        else
+            listTime = listData();
 
         // Actualizamos valores
-        this.repetitions    = data.getRepetitions();
-        this.error          = standardDeviation(listTime, data.getTime());
-
+        repetitions         = data.getRepetitions()+1;
 
         // Agregamos los datos estadisticos al Pojo
+        totalTime           = totalTime         + data.getTime();
+        totalHeight         = totalHeight       + data.getHeight();
+        totalSpaceDisk      = totalSpaceDisk    + data.getSpaceDisk();
+        totalAccessDisk     = totalAccessDisk   + data.getAccessDisk();
 
-        data.addAverageTime((totalTime+data.getTime())/repetitions);
-        data.addAverageHeight((totalHeight+data.getHeight())/repetitions);
-        data.addAverageSpaceDisk((totalSpaceDisk+data.getSpaceDisk())/repetitions);
-        data.addAverageAccessDisk((totalAccessDisk+data.getAccessDisk())/repetitions);
 
-        data.addError(this.error);
+        data.addRepetitions(repetitions);
+        data.addAverageTime(totalTime/repetitions);
+        data.addAverageHeight(totalHeight/repetitions);
+        data.addAverageSpaceDisk(totalSpaceDisk/repetitions);
+        data.addAverageAccessDisk(totalAccessDisk/repetitions);
+
+        this.averageTime    = totalTime/repetitions;
+        this.error          = standardDeviation(listTime, data.getTime());
+
+        // entrega el porcentaje de error
+        data.addError(this.error * 100 / data.getAverageTime());
+
         construction.add(data);
     }
 
     @Override
     public String getHeader() {
-        return construction.get(0).getHeader()+"\n";
+        return construction.get(0).getHeader();
     }
 
 
-    private List<Long> listData(long sizeArray){
+    private List<Long> listData(){
 
         List<Long> listTime = new ArrayList<Long>();
 
         for (ConstructionKDTree temp : construction) {
-            if (temp.getSizeArray() == sizeArray ){
-
                 listTime.add(temp.getTime());
-
-                // Obtenemos el total de los datos
-                this.totalTime =+ temp.getTime();
-                this.totalHeight =+ temp.getHeight();
-                this.totalSpaceDisk =+ temp.getSpaceDisk();
-                this.totalAccessDisk =+ temp.getAccessDisk();
-            }
         }
         return listTime;
     }
@@ -97,6 +103,12 @@ public class ConstructionStatistics extends Statistics{
     @Override
     public void clean(){
         construction.clear();
+
+        totalTime       = 0;
+        totalHeight     = 0;
+        totalSpaceDisk  = 0;
+        totalAccessDisk = 0;
+
     }
 
 }

@@ -15,18 +15,24 @@ public class QueryStatistics extends Statistics{
 
     public QueryStatistics(String name, String partition, String typeSequence) {
         super(name,partition,typeSequence);
+
         this.query          = new ArrayList<QueryKDTree>();
+        this.totalTime      = 0;
     }
 
 
     public void addQuery (QueryKDTree data){
 
         // Obtenemos valores que ya se han ingresado antes
-        List<Long> listTime = data(data.getSizeArray());
+        List<Long> listTime = new ArrayList<Long>();
+        if (data.getRepetitions() == 0)
+            listTime.add(data.getTime());
+        else
+            listTime = data();
 
         // Actualizamos valores
-        this.repetitions= data.getRepetitions();
-        this.totalTime =+data.getTime();
+        this.repetitions    = data.getRepetitions() + 1;
+        this.totalTime      = this.totalTime +data.getTime();
 
 
         // Calculamos los datos estadisticos
@@ -34,30 +40,30 @@ public class QueryStatistics extends Statistics{
         this.error = standardDeviation(listTime, data.getTime());
 
 
+        data.addRepetitions(repetitions);
         // Agregamos los datos estadisticos al Pojo
         data.addAverage(this.averageTime);
-        data.addError(this.error);
+
+        // porcentaje de error
+        data.addError(this.error * 100 / this.averageTime);
 
         this.query.add(data);
     }
 
 
-    private List<Long> data(long sizeArray){
+    private List<Long> data(){
 
         List<Long> listTime = new ArrayList<Long>();
 
         for (QueryKDTree temp : query) {
-            if (temp.getSizeArray() == sizeArray ){
                 listTime.add(temp.getTime());
-                this.totalTime = temp.getTime();
-            }
         }
         return listTime;
     }
 
     @Override
     public String getHeader(){
-        return query.get(0).getHeader()+"\n";
+        return query.get(0).getHeader();
     }
 
     public String getReport(){
@@ -79,5 +85,6 @@ public class QueryStatistics extends Statistics{
     @Override
     public void clean() {
         this.query.clear();
+        this.totalTime = 0;
     }
 }
