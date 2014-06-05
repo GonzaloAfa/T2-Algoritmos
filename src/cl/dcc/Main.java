@@ -1,22 +1,21 @@
 package cl.dcc;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Main {
 
     public static void main(String[] args) {
 
+
+
         // Experimento en memoria principal
         int minSizeArray    = 10;
-        int maxSizeArray    = 15;
+        int maxSizeArray    = 20;
 
         // Size Array
-        long sizeArray[] = new long[maxSizeArray - minSizeArray + 1];
+        long sizeArrayQuery[] = new long[maxSizeArray - minSizeArray + 1];
 
         // Init Array
-        for (int i = 0; i < sizeArray.length; i++)
-            sizeArray[i] = (long) Math.pow(2.0, (double) (minSizeArray + i));
+        for (int i = 0; i < sizeArrayQuery.length; i++)
+            sizeArrayQuery[i] = (long) Math.pow(2.0, (double) (minSizeArray + i));
 
 
 
@@ -32,7 +31,7 @@ public class Main {
         KDTree kdtree []        = {new KDTree(new MeanKDTree()), new KDTree(new MedianKDTree())};
 
 
-        for (long size : sizeArray ){
+        for (long size : sizeArrayQuery ){
 
             GeneratePoint points [] = { new RandomGenerate(0, Math.sqrt(size)) ,new LowDiscrepancyGenerate(0, Math.sqrt(size))};
 
@@ -44,7 +43,7 @@ public class Main {
 
                     // For de iteracion
 
-                    for (int k = 0; k < 10 ; k++) {
+                    for (int k = 0; k < 100 ; k++) {
 
                         long start = System.nanoTime();
                         kdtree[i].construirKDTree( points[j].generate(size) , KDAxis.horizontal);
@@ -57,7 +56,8 @@ public class Main {
                         construction.addTime(time);
 
                         // TODO: incorporar Altura y espacio
-//                      construction.addHeight();
+
+                        construction.addHeight(kdtree[i].getHeight);
                         construction.addSpaceDisk(kdtree[i].getUsedSpace());
 //                      construction.addAccessDisk();
 
@@ -73,7 +73,7 @@ public class Main {
 
                     DataReport dataReport = new DataReport(statistic[i][j], false);
 
-                    if (size == sizeArray[0] )
+                    if (size == sizeArrayQuery[0] )
                         dataReport.makeHeader();
 
                     dataReport.makeReport();
@@ -88,7 +88,6 @@ public class Main {
         }
 
 
-
         /**
          *
          * Experimento de las consultas
@@ -97,7 +96,6 @@ public class Main {
 
         System.out.println("==== Experimento de las consultas ====");
 
-        long sizeArrayQuery = (long)Math.pow(2, 15);
 
         Statistics statisticQuery[][] = {
                 { new QueryStatistics("Consultas", " Media",   "Random" ),
@@ -106,78 +104,85 @@ public class Main {
                         new QueryStatistics("Consultas", " Mediana", "Baja Discrepancia")}
         };
 
-        // Preparamos el KDTree de consulta
-        KDTree tree [][] = {{
-                new KDTree(new MeanKDTree()),
-                new KDTree(new MeanKDTree())},{
-
-                new KDTree(new MedianKDTree()),
-                new KDTree(new MedianKDTree())
-                }};
 
 
-        GeneratePoint points [] = {
-                new RandomGenerate(0, Math.sqrt(sizeArrayQuery )),
-                new LowDiscrepancyGenerate(0, Math.sqrt(sizeArrayQuery ))
-        };
 
 
-        // Construir el KDTree
-        for (int i = 0; i < tree.length ; i++) {
-            for (int j = 0; j < tree[0].length ; j++) {
-                tree[i][j].construirKDTree( points[i].generate(sizeArrayQuery) ,KDAxis.horizontal);
-            }
+
+
+
+for (long size : sizeArrayQuery) {
+
+    // Preparamos el KDTree de consulta
+    KDTree tree[][] = {{
+            new KDTree(new MeanKDTree()),
+            new KDTree(new MeanKDTree())}, {
+
+            new KDTree(new MedianKDTree()),
+            new KDTree(new MedianKDTree())
+    }};
+
+
+    GeneratePoint points[] = {
+            new RandomGenerate(0, Math.sqrt(size)),
+            new LowDiscrepancyGenerate(0, Math.sqrt(size))
+    };
+
+
+    // Construir el KDTree
+    for (int i = 0; i < tree.length; i++) {
+        for (int j = 0; j < tree[0].length; j++) {
+            tree[i][j].construirKDTree(points[i].generate(size), KDAxis.horizontal);
         }
+    }
 
 
-        // Comenzamos con las consultas
+    // Comenzamos con las consultas
 
 
-        for (int i = 0; i < tree.length ; i++) {
-            for (int j = 0; j < tree[0].length ; j++) {
+    for (int i = 0; i < tree.length; i++) {
+        for (int j = 0; j < tree[0].length; j++) {
 
-                for (int k = 0; k < 10 ; k++) {
+            for (int k = 0; k < 100; k++) {
 
-                    GeneratePoint pointsQuery = new RandomGenerate(0, Math.sqrt(sizeArrayQuery));
+                GeneratePoint pointsQuery = new RandomGenerate(0, Math.sqrt(size));
 
-                    long time = System.nanoTime();
+                long time = System.nanoTime();
 
-                    for (KDPoint q : pointsQuery.generate(sizeArrayQuery) )
-                        tree[i][j].vecinoMasCercano(q);
+                for (KDPoint q : pointsQuery.generate(size))
+                    tree[i][j].vecinoMasCercano(q);
 
-                    long timeTotal = System.nanoTime()-time;
+                long timeTotal = System.nanoTime() - time;
 
-                    QueryKDTree query = new QueryKDTree(sizeArrayQuery);
+                QueryKDTree query = new QueryKDTree(size);
 
-                    query.addSizeArray(sizeArrayQuery);
-                    query.addRepetitions(k);
-                    //query.addAccessDisk();
-                    query.addTimeQuery(timeTotal);
-                    statisticQuery[i][j].addQuery(query);
+                query.addSizeArray(size);
+                query.addRepetitions(k);
+//                query.addAccessDisk((long)tree[i][j].getUsedSpace());
+                query.addTimeQuery(timeTotal);
+                statisticQuery[i][j].addQuery(query);
 
-                    if ( k >= 3 ){
-                        if (statisticQuery[i][j].isLowError())
-                            break;
-                    }
+                if (k >= 3) {
+                    if (statisticQuery[i][j].isLowError())
+                        break;
                 }
-
-
-                DataReport dataReport = new DataReport(statisticQuery[i][j], false);
-
-                dataReport.makeHeader();
-                dataReport.makeReport();
-                dataReport.flush();
-                dataReport.close();
-
-
-                statisticQuery[i][j].clean();
             }
+
+
+            DataReport dataReport = new DataReport(statisticQuery[i][j], false);
+
+            if (size == sizeArrayQuery[0] )
+                dataReport.makeHeader();
+            dataReport.makeReport();
+            dataReport.flush();
+            dataReport.close();
+
+
+            statisticQuery[i][j].clean();
         }
+    }
 
 
-
-
-
-
+}
     }
 }

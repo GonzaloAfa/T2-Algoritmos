@@ -79,7 +79,7 @@ public class QueryStatistics extends Statistics{
     public String getSummary() {
         String summary = query.get(query.size()-1).getData();
         System.out.println(summary);
-        return summary;
+        return summary+"\n";
     }
 
     @Override
