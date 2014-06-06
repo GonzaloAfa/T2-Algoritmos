@@ -26,7 +26,6 @@ public class LowDiscrepancyGenerate extends GeneratePoint {
 
 
 
-    // TODO about Halton Sequence > http://en.wikipedia.org/wiki/Halton_sequence
 
     /**
      * Get Halton number for given index and base.

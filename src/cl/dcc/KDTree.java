@@ -13,7 +13,7 @@ public class KDTree {
     Search search;
 
     public static SplitMethod splitMethod;
-    public long getHeight;
+    public long height;
 
     public KDTree(SplitMethod splitMethod) {
         this.splitMethod = splitMethod;
@@ -28,7 +28,7 @@ public class KDTree {
 
         root = new KDNode(P, splitaxis, rect);
 
-        root.getHeight();
+        height = root.getHeight();
 
         return root;
     }

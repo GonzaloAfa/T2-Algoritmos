@@ -185,27 +185,6 @@ public class MemoryManager {
         priority.offerFirst(elmt);
     }
 
-    /*
-    * Escribe en el buffer un nodo completo con el formato especificado comenzando en el byte start (myPagePos)
-    *
-    * */
-    private void writeToBuffer(KDNode nodo, byte [] buffer) throws IOException {
 
-        // FilePosicion
-        file.writeLong(nodo.getMyFilePos());
-
-        // Internal Node Data
-        nodo.getLeft();
-        nodo.getRight();
-        nodo.getAxis();
-
-        // Leaf data (x,y)
-        file.writeDouble(nodo.getPoint().getX());
-        file.writeDouble(nodo.getPoint().getY());
-
-        // Bounding rectangle
-        nodo.getKDRect();
-
-    }
 
 }

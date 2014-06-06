@@ -43,7 +43,7 @@ public class Main {
 
                     // For de iteracion
 
-                    for (int k = 0; k < 100 ; k++) {
+                    for (int k = 0; k < 1 ; k++) {
 
                         long start = System.nanoTime();
                         kdtree[i].construirKDTree( points[j].generate(size) , KDAxis.horizontal);
@@ -57,7 +57,7 @@ public class Main {
 
                         // TODO: incorporar Altura y espacio
 
-                        construction.addHeight(kdtree[i].getHeight);
+                        construction.addHeight(kdtree[i].height);
                         construction.addSpaceDisk(kdtree[i].getUsedSpace());
 //                      construction.addAccessDisk();
 

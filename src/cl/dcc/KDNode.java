@@ -79,6 +79,49 @@ public class KDNode {
         nodeCount = 1 + left.getNodeCount() + right.getNodeCount();
     }
 
+    public KDNode(List<KDPoint> P,boolean splitaxis, KDRect bounds, MemoryManager mem) throws IOException {
+        this.myFilePos = mem.getNewPosition();
+
+        // Retornamos una hoja con el punto dado
+        if (P.size() == 1) {
+            point = P.get(0);
+            height = 1;
+            nodeCount = 1;
+            return;
+        }
+
+        // Marcamos los límites de este nodo interno
+        rect = bounds;
+        double[] array = KDPoint.toCoordArray(P, splitaxis);
+        Arrays.sort(array);
+        double med = array[(int) array.length / 2];
+
+        // Necesitamos dividir el conjunto de puntos dado cierto criterio
+        double splitPoint = KDTree.splitMethod.getSplitPoint(P, splitaxis);
+        axis = new KDAxis(splitPoint, splitaxis);
+
+        ArrayList[] splittedPoints = KDTree.split(P, splitPoint, splitaxis);
+        KDRect[] boundingRects = rect.split(axis);
+
+
+
+
+        KDNode left = new KDNode(splittedPoints[0], !splitaxis, boundingRects[0], mem);
+        mem.saveNode(left);
+
+        KDNode right= new KDNode(splittedPoints[1], !splitaxis, boundingRects[1], mem);
+        mem.saveNode(right);
+
+        // nodo listo!
+        setLeft(left);
+        setRight(right);
+
+        height = 1 + Math.max(left.getHeight(), right.getHeight());
+        nodeCount = 1 + left.getNodeCount() + right.getNodeCount();
+
+    }
+
+
     public KDNode(byte[] buffer) {
         // TODO: Completar el KDNode
 
@@ -90,6 +133,7 @@ public class KDNode {
         double y = ByteBuffer.wrap(buffer, ini, DOUBLE).getDouble();
         ini = +DOUBLE;
 
+
         point.setX(x);
         point.setY(y);
 
@@ -99,6 +143,9 @@ public class KDNode {
 
         // TODO KDAxis axis
 
+
+        // 2 Punteros a izquierdo y derecho, 1 booleano y un double para el eje, 2 double para el punto,
+        // 4 double para el rectangulo y 2 enteros para el número de nodos
     }
 
 
@@ -176,6 +223,7 @@ public class KDNode {
 
         ByteBuffer.wrap(buffer, ini, DOUBLE).putDouble(point.getY());
         ini = ini + DOUBLE; //dejo el puntero al final de getY
+
 
 
         // TODO KDNode Left
